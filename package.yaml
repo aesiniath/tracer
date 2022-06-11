@@ -1,0 +1,35 @@
+name: tracer
+version: 0.1.0.0
+synopsis: Manually instrument a script with spans and traces
+author: Andrew Cowie <istathar@gmail.com>
+maintainer: Andrew Cowie <istathar@gmail.com>
+copyright: © 2021-2022 Athae Eredh Siniath and Others
+license: MIT
+tested-with: GHC == 9.2.2
+
+ghc-options: -Wall -Wwarn -fwarn-tabs
+
+dependencies:
+  - base
+  - core-data
+  - core-text
+  - core-program
+  - core-telemetry >= 0.2.3.4
+
+executables:
+  hello:
+    source-dirs:
+      - src
+    main: TracerMain.hs
+    ghc-options: -threaded
+    other-modules: []
+
+tests:
+  check:
+    dependencies:
+      - hspec
+    ghc-options: -threaded
+    source-dirs:
+      - tests
+    main: TestSuite.hs
+    other-modules: []

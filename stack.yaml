@@ -1,0 +1,19 @@
+resolver: nightly-2022-06-06
+packages:
+- .
+
+extra-deps:
+#
+# there was actually no immediate reason to depend on the latest versions of
+# these libraries other than to show the way you add specific versions to your
+# Stack resolver if you need something newer than what is in the snaphot above.
+#
+
+- core-data-0.3.3.1
+- core-program-0.5.0.2
+- core-text-0.3.7.2
+- core-telemetry-0.2.3.4
+
+#
+# bump aeson dependency for security reasons
+#
