@@ -6,32 +6,41 @@ Usage
 
 ### Setup
 
+The _tracer_ program has three commands, _init_, _exec_, and _send_.
+
+To begin recording a trace of a set of programs or scripts, first call _init_
+supplying `honeycomb` as the telemetry exporter and providing the name of the
+dataset these events will be sent to:
+
 ```
-$ tracer --telemetry=honeycomb --dataset=builder init 235238509232
+$ tracer --telemetry=honeycomb --dataset=builder init
 ```
 
-Writes a temporary file (defaulting to _tracedetails.json_ or _.trace_)
+This writes a temporary file (defaulting to _.trace_) along the following
+lines:
 
 ```json
 {
     "start": 1654910414,
-    "trace": "fd533dbf96ecdc610156482ae36c24f7",
-    "parent": "1d1e9dbf96ec4649"
+    "trace": "fd531dbf96ecdc6ff156482aec6c24f7",
+    "parent": "1d1e9d1234ec4649"
 }
 ```
 
 ### Run steps
 
-This is then used by two commands _leaf_ and _root_. Use _leaf_ to execute a step 
+This file is then used by the other two commands to enable them to _init_ and
+_root_. Use _leaf_ to execute a step
 
 ```
-$ tracer --telemetry=honeycomb --dataset=builder leaf "Label" command...
-$ tracer --telemetry=honeycomb --dataset=builder leaf "Label" command...
-$ tracer --telemetry=honeycomb --dataset=builder leaf "Label" command...
+$ tracer --telemetry=honeycomb --dataset=builder exec "Label" command...
+$ tracer --telemetry=honeycomb --dataset=builder exec "Label" command...
+$ tracer --telemetry=honeycomb --dataset=builder exec "Label" command...
 ```
 
-By convention the `Label` is the name of the function or step you are
-executing. 
+By convention the `Label` used as the name of the step you are executing is
+the name of the program, script, or function your are executing, rather than
+something particularly descriptive. If you want something human readable
 
 ### Finalize
 
@@ -40,7 +49,7 @@ creating a root span to be the parent of the previously created leaves and to
 represent the total duration of the process:
 
 ```
-$ tracer --telemetry=honeycomb --dataset=builder root "Label"
+$ tracer --telemetry=honeycomb --dataset=builder send "Label"
 ```
 
 <!--
