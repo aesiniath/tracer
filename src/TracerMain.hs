@@ -31,7 +31,7 @@ main = do
                         "Name for the root span."
                     ]
                 , Command
-                    "leaf"
+                    "exec"
                     "Wrap the execution of a command in a span, recording its start time and duration."
                     [ Argument
                         "label"
@@ -39,7 +39,7 @@ main = do
                     , Remaining "The command and arguments to run"
                     ]
                 , Command
-                    "root"
+                    "send"
                     "Send the root span, finishing the corresponding trace."
                     [ Argument
                         "label"
