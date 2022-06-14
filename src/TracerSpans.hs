@@ -5,11 +5,12 @@
 module TracerSpans where
 
 import Core.Data
-import Core.Program hiding (Datum (..))
-import Core.System (liftIO)
+import Core.Program
+import Core.System
 import Core.Telemetry
 import Core.Text
 import Data.Word (Word16)
+import System.Process.Typed
 import System.Random (randomIO)
 
 import StateFile
@@ -26,7 +27,7 @@ program = do
         "init" -> do
             prepareTraceFile path
         "exec" -> do
-            executeChildProcess path "list-files" "ls" ["-l"]
+            executeChildProcess path "list-files" "find" ["/"]
         "send" -> do
             -- finalizeRootSpan
             undefined
@@ -54,6 +55,12 @@ prepareTraceFile path = do
 
         writeTraceFile path (TraceState now trace unique)
 
+data TraceExecutionProblem
+    = ChildProcessFailed Int
+    deriving (Show)
+
+instance Exception TraceExecutionProblem
+
 executeChildProcess :: FilePath -> Label -> Rope -> [Rope] -> Program None ()
 executeChildProcess path label command args = do
     state <- readTraceFile path
@@ -62,10 +69,16 @@ executeChildProcess path label command args = do
 
     usingTrace trace parent $ do
         encloseSpan label $ do
-            (exit, out, err) <- execProcess (command : args)
+            let task = proc (fromRope command) (fmap fromRope args)
+                task' = setStdin closed task
+
+            exit <- liftIO $ do
+                runProcess task'
+
             debugS "exit" exit
-            debug "out" out
-            debug "err" err
+            case exit of
+                ExitSuccess -> pure ()
+                ExitFailure n -> throw (ChildProcessFailed n)
 
 finalizeRootSpan :: Label -> Program None ()
 finalizeRootSpan label = do
