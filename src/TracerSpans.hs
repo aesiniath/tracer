@@ -27,7 +27,7 @@ program = do
         "init" -> do
             prepareTraceFile path
         "exec" -> do
-            executeChildProcess path "list-files" "find" ["/"]
+            executeChildProcess path
         "send" -> do
             -- finalizeRootSpan
             undefined
@@ -61,11 +61,15 @@ data TraceExecutionProblem
 
 instance Exception TraceExecutionProblem
 
-executeChildProcess :: FilePath -> Label -> Rope -> [Rope] -> Program None ()
-executeChildProcess path label command args = do
+executeChildProcess :: FilePath -> Program None ()
+executeChildProcess path = do
     state <- readTraceFile path
     let trace = stateTraceIdentifier state
         parent = stateParentIdentifier state
+
+    label <- queryArgument "label"
+    command <- queryArgument "command"
+    args <- queryRemaining
 
     usingTrace trace parent $ do
         encloseSpan label $ do
