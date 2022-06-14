@@ -11,18 +11,23 @@ ghc-options: -Wall -Wwarn -fwarn-tabs
 
 dependencies:
   - base
+  - bytestring
   - core-data
   - core-text
   - core-program
   - core-telemetry >= 0.2.3.4
+  - random
+  - scientific
 
 executables:
   tracer:
     source-dirs:
-      - src
+    - src
     main: TracerMain.hs
     ghc-options: -threaded
-    other-modules: []
+    other-modules:
+    - TracerSpans
+    - StateFile
 
 tests:
   check:
