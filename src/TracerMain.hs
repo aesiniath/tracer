@@ -1,11 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 import Core.Program
 import Core.Telemetry
 import Core.Text
+
+import TracerSpans (program)
 
 version :: Version
 version = $(fromPackage)
@@ -81,7 +82,3 @@ main = do
             context
 
     executeWith context' program
-
-program :: Program None ()
-program = do
-    write "Hello World"
