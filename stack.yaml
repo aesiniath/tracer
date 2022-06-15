@@ -10,7 +10,7 @@ extra-deps:
 #
 
 - core-data-0.3.3.1
-- core-program-0.5.0.3
+- core-program-0.5.0.4
 - core-text-0.3.7.2
 - core-telemetry-0.2.3.5
 
