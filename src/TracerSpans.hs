@@ -29,8 +29,7 @@ program = do
         "exec" -> do
             executeChildProcess path
         "send" -> do
-            -- finalizeRootSpan
-            undefined
+            finalizeRootSpan path
         _ -> invalid
 
     pure ()
@@ -71,6 +70,9 @@ executeChildProcess path = do
     command <- queryArgument "command"
     args <- queryRemaining
 
+    debug "command" command
+    debugS "args" args
+
     usingTrace trace parent $ do
         encloseSpan label $ do
             let task = proc (fromRope command) (fmap fromRope args)
@@ -84,13 +86,14 @@ executeChildProcess path = do
                 ExitSuccess -> pure ()
                 ExitFailure n -> throw (ChildProcessFailed n)
 
-finalizeRootSpan :: Label -> Program None ()
-finalizeRootSpan label = do
-    let state = undefined :: TraceState
-
+finalizeRootSpan :: FilePath -> Program None ()
+finalizeRootSpan path = do
+    state <- readTraceFile path
     let start = stateStartTime state
         trace = stateTraceIdentifier state
         parent = stateParentIdentifier state
+
+    label <- queryArgument "label"
 
     usingTrace' trace $ do
         encloseSpan label $ do

@@ -47,7 +47,8 @@ your are executing, rather than a descriptive string.
             , Argument
                 "command"
                 [quote|
-The program or script to run.
+The program to run. It needs to either be an absolute path or a binary by that
+name must be on your PATH.
                 |]
             , Remaining
                 [quote|
