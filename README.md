@@ -29,27 +29,27 @@ lines:
 
 ### Run steps
 
-This file is then used by the other two commands to enable them to _init_ and
-_root_. Use _leaf_ to execute a step
+This file is then used by the other two commands _exec_ and _send_ to enable
+them to know what trace they are a part of. Use _exec_ to execute a step:
 
 ```
-$ tracer --telemetry=honeycomb --dataset=builder exec "Label" command...
-$ tracer --telemetry=honeycomb --dataset=builder exec "Label" command...
-$ tracer --telemetry=honeycomb --dataset=builder exec "Label" command...
+$ tracer --telemetry=honeycomb --dataset=builder exec "label-one" command1 ...
+$ tracer --telemetry=honeycomb --dataset=builder exec "label-two" command2 ...
+$ tracer --telemetry=honeycomb --dataset=builder exec "label-three" command3 ...
 ```
 
-By convention the `Label` used as the name of the step you are executing is
+By convention the "`label`" used as the name of the step you are executing is
 the name of the program, script, or function your are executing, rather than
-something particularly descriptive. If you want something human readable
+something particularly descriptive.
 
 ### Finalize
 
-Finally, when the sequence of steps is complete, the trace is finished off by
-creating a root span to be the parent of the previously created leaves and to
-represent the total duration of the process:
+When the sequence of steps is complete, the trace is finished off by creating
+a root span to be the parent of the previously created leaves and to represent
+the total duration of the process:
 
 ```
-$ tracer --telemetry=honeycomb --dataset=builder send "Label"
+$ tracer --telemetry=honeycomb --dataset=builder send "label"
 ```
 
 <!--
