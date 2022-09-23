@@ -1,4 +1,4 @@
-resolver: nightly-2022-06-06
+resolver: nightly-2022-09-23
 packages:
 - .
 
@@ -9,10 +9,10 @@ extra-deps:
 # Stack resolver if you need something newer than what is in the snaphot above.
 #
 
-- core-data-0.3.3.1
-- core-program-0.5.0.4
-- core-text-0.3.7.2
-- core-telemetry-0.2.3.5
+- core-data-0.3.6.0
+- core-program-0.5.2.0
+- core-text-0.3.8.0
+- core-telemetry-0.2.6.0
 
 #
 # bump aeson dependency for security reasons
