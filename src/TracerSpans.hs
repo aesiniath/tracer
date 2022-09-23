@@ -10,7 +10,8 @@ import Core.System
 import Core.Telemetry
 import Core.Text
 import Data.Word (Word16)
-import System.Process.Typed
+import System.Exit (ExitCode (..))
+import System.Process.Typed (nullStream, proc, runProcess, setStdin)
 import System.Random (randomIO)
 
 import StateFile
@@ -76,7 +77,7 @@ executeChildProcess path = do
     usingTrace trace parent $ do
         encloseSpan label $ do
             let task = proc (fromRope command) (fmap fromRope args)
-                task' = setStdin closed task
+                task' = setStdin nullStream task
 
             exit <- liftIO $ do
                 runProcess task'
